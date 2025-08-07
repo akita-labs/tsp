@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互式报告：信任跨越协议 (TSP)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .step-content {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .step-content.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            position: absolute;
+        }
+        .nav-link.active {
+            color: #f6ad55;
+            font-weight: 700;
+        }
+        .diagram-box {
+            border: 2px solid #cbd5e0;
+            background-color: #f7fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+        .diagram-arrow {
+            font-size: 2rem;
+            color: #718096;
+            align-self: center;
+        }
+        .tsp-block-placeholder {
+            border: 2px dashed #a0aec0;
+            color: #a0aec0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tsp-block-active {
+            background-color: #f6ad55;
+            color: white;
+            border-color: #f6ad55;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-[#fdfdfc] text-[#333333]">
+
+<!-- Chosen Palette: Warm Neutrals -->
+<!-- Application Structure Plan: A single-page, top-down narrative structure with a sticky navigation bar for quick access. The flow guides the user from the high-level problem ('Trust Deficit') to the proposed solution (TSP), then dives into its architecture with interactive diagrams ('Trust Handshake', 'Message Anatomy'). It then contextualizes TSP within its ecosystem (DID/VC), compares it to legacy protocols via an interactive chart, and finally looks to its future role in the agentic web. This thematic, interactive approach is chosen over a linear report dump to make the complex, abstract information more digestible and engaging for a technical but broad audience. -->
+<!-- Visualization & Content Choices: 
+- Trust Deficit: Goal=Inform. Method=Side-by-side HTML/CSS diagram comparing centralized vs. decentralized models. Justification=Visually contrasts the core problem with the proposed solution paradigm immediately.
+- ToIP Hourglass: Goal=Organize. Method=HTML/CSS diagram. Justification=Clearly illustrates the architectural principle of a narrow, universal layer, which is central to TSP's purpose.
+- Trust Handshake: Goal=Explain Process. Method=Interactive step-by-step diagram (HTML/CSS/JS). Justification=Deconstructs a complex protocol flow into manageable, user-controlled steps, enhancing comprehension.
+- Protocol Comparison: Goal=Compare. Method=Interactive Radar Chart (Chart.js). Interaction=User can toggle different protocols on/off. Justification=Provides a powerful, multi-attribute visual comparison that is more intuitive than a static table.
+- Agentic Web: Goal=Show Relationships. Method=Interactive HTML/CSS diagram. Interaction=Button click visually inserts TSP as the "missing link". Justification=Dramatizes TSP's role and creates a memorable "aha" moment for the user.
+- Library/Method: All visuals are built with HTML/CSS/JS and Chart.js (Canvas), adhering to constraints.
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <header class="sticky top-0 bg-[#fdfdfc]/80 backdrop-blur-sm z-50 py-4 border-b border-gray-200">
+            <nav class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-[#4a5568]">信任跨越协议 (TSP)</h1>
+                <ul class="hidden md:flex space-x-6 font-medium text-gray-600">
+                    <li><a href="#problem" class="nav-link hover:text-[#f6ad55] transition-colors">核心问题</a></li>
+                    <li><a href="#architecture" class="nav-link hover:text-[#f6ad55] transition-colors">架构解析</a></li>
+                    <li><a href="#ecosystem" class="nav-link hover:text-[#f6ad55] transition-colors">生态系统</a></li>
+                    <li><a href="#comparison" class="nav-link hover:text-[#f6ad55] transition-colors">范式转移</a></li>
+                    <li><a href="#future" class="nav-link hover:text-[#f6ad55] transition-colors">未来展望</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section id="intro" class="text-center py-20">
+                <h2 class="text-4xl md:text-5xl font-bold text-[#4a5568] mb-4">构建下一代互联网的信任基石</h2>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                    TSP并非对现有协议的微小改进，而是一个基础性的“跨越层”，旨在为去中心化身份和未来的代理式网络提供通用、可互操作的信任。本应用将带您交互式地探索其核心理念与架构。
+                </p>
+            </section>
+
+            <section id="problem" class="py-16">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-[#4a5568]">核心问题：互联网的信任赤字</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">当前互联网的身份模型是中心化的，导致数据孤岛、隐私泄露和单点故障。TSP提出了一种根本性的转变。</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-center">传统中心化模型 (代理式信任)</h3>
+                        <div class="p-6 bg-white rounded-lg shadow-md border border-gray-200">
+                            <div class="flex flex-col items-center space-y-4">
+                                <div class="diagram-box w-full">👤 用户</div>
+                                <div class="diagram-arrow">↕️</div>
+                                <div class="diagram-box w-full bg-red-100 border-red-300">🏢 中心化身份提供商 (IdP)</div>
+                                <div class="diagram-arrow">↕️</div>
+                                <div class="diagram-box w-full">🌐 应用/服务</div>
+                            </div>
+                            <p class="mt-4 text-gray-600">信任由第三方IdP代理。用户数据和身份控制权集中在IdP手中，形成了“蜜罐”和单点故障。</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-center">TSP 去中心化模型 (点对点信任)</h3>
+                        <div class="p-6 bg-white rounded-lg shadow-md border border-gray-200">
+                            <div class="flex items-center justify-center space-x-4">
+                                <div class="diagram-box flex-1">👤 端点A (用户)</div>
+                                <div class="diagram-arrow text-green-500">↔️</div>
+                                <div class="diagram-box flex-1">🌐 端点B (服务)</div>
+                            </div>
+                             <p class="mt-4 text-gray-600">任何两个端点都可以通过密码学直接建立信任，无需中心中介。用户真正拥有并控制自己的身份。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="architecture" class="py-16 bg-gray-50 rounded-lg">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-[#4a5568]">架构解析：TSP如何工作？</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">TSP的设计遵循极简、分层的原则，其核心是“信任握手”过程，以建立安全的点对点通信信道。</p>
+                </div>
+
+                <div class="mb-16">
+                    <h3 class="text-2xl font-semibold text-center mb-6">ToIP 沙漏模型</h3>
+                    <div class="max-w-md mx-auto">
+                        <div class="diagram-box w-full text-center p-4">应用 & 信任任务 (L3/4)</div>
+                        <div class="flex justify-center"><div class="w-0 h-0 border-l-[80px] border-l-transparent border-t-[40px] border-t-gray-200 border-r-[80px] border-r-transparent"></div></div>
+                        <div class="diagram-box w-1/2 mx-auto text-center p-2 bg-[#f6ad55] text-white font-bold">TSP (L2)</div>
+                        <div class="flex justify-center"><div class="w-0 h-0 border-l-[80px] border-l-transparent border-b-[40px] border-b-gray-200 border-r-[80px] border-r-transparent"></div></div>
+                        <div class="diagram-box w-full text-center p-4">硬件 & 网络 (L1)</div>
+                    </div>
+                    <p class="mt-4 text-center text-gray-600 max-w-2xl mx-auto">与互联网协议(IP)类似，TSP位于沙漏的“窄腰”处，为上层无数的应用提供了一个通用的、极简的信任层。</p>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-center mb-8">交互式“信任握手”流程</h3>
+                    <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                        <div id="handshake-container" class="relative h-48">
+                        </div>
+                        <div class="flex justify-between items-center mt-6">
+                            <button id="prev-step" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50">上一步</button>
+                            <div id="step-indicator" class="text-gray-600 font-medium">第 1 / 6 步</div>
+                            <button id="next-step" class="bg-[#a0aec0] hover:bg-[#718096] text-white font-bold py-2 px-4 rounded-r">下一步</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ecosystem" class="py-16">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-[#4a5568]">生态系统：TSP、DID 与 VC 的共生</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">TSP 并非孤立存在，它与去中心化标识符(DID)和可验证凭证(VC)共同构成了一个完整的去中心化信任体系。</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8 items-start text-center">
+                     <div class="p-4">
+                        <div class="text-5xl mb-4">🆔</div>
+                        <h3 class="text-xl font-semibold mb-2">去中心化标识符 (DID)</h3>
+                        <p class="text-gray-600">身份的锚点。用户拥有并控制的、无需中心化机构的全球唯一标识符。</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-5xl mb-4">📜</div>
+                        <h3 class="text-xl font-semibold mb-2">可验证凭证 (VC)</h3>
+                        <p class="text-gray-600">声明的语言。由发行方对主体做出的、经密码学签名的、防篡改的声明（如数字文凭）。</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-5xl mb-4">🤝</div>
+                        <h3 class="text-xl font-semibold mb-2">信任跨越协议 (TSP)</h3>
+                        <p class="text-gray-600">交互的信道。在两个DID之间建立安全的、相互认证的通信管道，用于安全地交换VC等数据。</p>
+                    </div>
+                </div>
+                 <p class="mt-12 text-center text-lg text-gray-700 max-w-4xl mx-auto bg-gray-50 p-6 rounded-lg">
+                    <strong>完整流程：</strong> 一个持有DID的<span class="text-[#f6ad55] font-bold">用户</span>，通过安全的<span class="text-[#f6ad55] font-bold">TSP</span>信道，向一个同样持有DID的<span class="text-[#f6ad55] font-bold">验证方</span>出示由<span class="text-[#f6ad55] font-bold">发行方</span>颁发的<span class="text-[#f6ad55] font-bold">VC</span>。TSP保证了这个交互过程的安全与真实。
+                </p>
+            </section>
+
+            <section id="comparison" class="py-16 bg-gray-50 rounded-lg">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-[#4a5568]">范式转移：TSP vs. 传统协议</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">与SAML、OAuth和OIDC等中心化协议相比，TSP在信任模型、数据控制和灵活性上实现了根本性的飞跃。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <div class="chart-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                    <div class="mt-6 flex justify-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox protocol-toggle" value="SAML" checked>
+                            <span class="ml-2">SAML 2.0</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox protocol-toggle" value="OIDC" checked>
+                            <span class="ml-2">OpenID Connect</span>
+                        </label>
+                         <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox protocol-toggle" value="OAuth" checked>
+                            <span class="ml-2">OAuth 2.0</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <section id="future" class="py-16">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-[#4a5568]">未来展望：代理式网络的基石</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">在由AI代理构成的下一代互联网中，代理之间如何安全地识别和通信？TSP提供了关键的底层信任设施。</p>
+                </div>
+                <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-center mb-6">连接代理生态系统</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+                        <div class="diagram-box">NANDA 索引 (发现)</div>
+                        <div class="diagram-arrow">→</div>
+                        <div id="tsp-placeholder" class="tsp-block-placeholder h-full rounded-lg">缺失的信任层</div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-box">MCP/A2A 协议 (通信)</div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button id="enable-tsp-btn" class="bg-[#f6ad55] hover:bg-orange-500 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">
+                            启用 TSP 信任跨越层
+                        </button>
+                    </div>
+                    <p class="mt-6 text-gray-600 text-center">MIT Nanda和微软Open Agentic Web等项目构想了高层组件，但它们都隐含地需要一个安全的底层协议。点击按钮，查看TSP如何填补这一关键空白，通过提供“信任握手”来安全地连接代理。</p>
+                </div>
+            </section>
+             <section id="conclusion" class="text-center py-20">
+                <h2 class="text-3xl font-bold text-[#4a5568] mb-4">结论：一个新信任经济的开端</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    TSP不仅仅是一项技术，它是构建一个更安全、更公平、更具弹性的数字世界的基础。它将数据主权交还给用户，并为即将到来的、由自主代理驱动的智能经济奠定了可信的基石。
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const handshakeSteps = [
+                {
+                    title: "第一步：解析VID",
+                    description: "端点A解析端点B的可验证标识符(VID/DID)，以获取其公钥和网络地址等信息。"
+                },
+                {
+                    title: "第二步：验证VID",
+                    description: "端点A通过密码学挑战-响应，验证端点B确实控制着其VID对应的私钥，防止身份欺骗。"
+                },
+                {
+                    title: "第三步：创建消息",
+                    description: "端点A构建第一条TSP消息。关键的是，这条消息可以立即携带应用数据，无需等待。"
+                },
+                {
+                    title: "第四步：建立传输",
+                    description: "端点A使用解析出的网络地址，与端点B建立一个底层传输连接（如TCP）。"
+                },
+                {
+                    title: "第五步：发送消息",
+                    description: "将完整签名和加密的TSP消息通过已建立的传输层发送给端点B。"
+                },
+                {
+                    title: "第六步：更新状态",
+                    description: "端点A在本地记录该信任关系已建立。当B完成同样的过程后，一个双向信任信道便形成了。"
+                }
+            ];
+
+            let currentStep = 0;
+            const handshakeContainer = document.getElementById('handshake-container');
+            const prevBtn = document.getElementById('prev-step');
+            const nextBtn = document.getElementById('next-step');
+            const stepIndicator = document.getElementById('step-indicator');
+
+            function renderHandshakeStep() {
+                handshakeContainer.innerHTML = '';
+                handshakeSteps.forEach((step, index) => {
+                    const stepEl = document.createElement('div');
+                    stepEl.className = 'step-content w-full text-center p-4';
+                    if (index !== currentStep) {
+                        stepEl.classList.add('hidden');
+                    }
+                    stepEl.innerHTML = `
+                        <h4 class="text-xl font-semibold text-[#4a5568]">${step.title}</h4>
+                        <p class="mt-2 text-gray-600">${step.description}</p>
+                    `;
+                    handshakeContainer.appendChild(stepEl);
+                });
+                stepIndicator.textContent = `第 ${currentStep + 1} / ${handshakeSteps.length} 步`;
+                prevBtn.disabled = currentStep === 0;
+                nextBtn.disabled = currentStep === handshakeSteps.length - 1;
+                 if (nextBtn.disabled) {
+                    nextBtn.classList.remove('bg-[#a0aec0]', 'hover:bg-[#718096]');
+                    nextBtn.classList.add('bg-gray-300');
+                } else {
+                    nextBtn.classList.add('bg-[#a0aec0]', 'hover:bg-[#718096]');
+                    nextBtn.classList.remove('bg-gray-300');
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep < handshakeSteps.length - 1) {
+                    currentStep++;
+                    renderHandshakeStep();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    renderHandshakeStep();
+                }
+            });
+
+            renderHandshakeStep();
+            
+            const comparisonData = {
+                labels: ['数据控制', '信任模型', '架构风格', '传输依赖性', '灵活性'],
+                datasets: [
+                    {
+                        label: 'TSP',
+                        data: [5, 5, 5, 5, 5],
+                        backgroundColor: 'rgba(246, 173, 85, 0.2)',
+                        borderColor: 'rgba(246, 173, 85, 1)',
+                        pointBackgroundColor: 'rgba(246, 173, 85, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(246, 173, 85, 1)'
+                    },
+                    {
+                        label: 'SAML',
+                        data: [1, 2, 2, 2, 2],
+                        backgroundColor: 'rgba(74, 85, 104, 0.2)',
+                        borderColor: 'rgba(74, 85, 104, 1)',
+                        pointBackgroundColor: 'rgba(74, 85, 104, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(74, 85, 104, 1)',
+                        hidden: false
+                    },
+                    {
+                        label: 'OIDC',
+                        data: [2, 2, 2, 2, 3],
+                        backgroundColor: 'rgba(160, 174, 192, 0.2)',
+                        borderColor: 'rgba(160, 174, 192, 1)',
+                        pointBackgroundColor: 'rgba(160, 174, 192, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(160, 174, 192, 1)',
+                        hidden: false
+                    },
+                     {
+                        label: 'OAuth',
+                        data: [2, 2, 2, 2, 2],
+                        backgroundColor: 'rgba(113, 128, 150, 0.2)',
+                        borderColor: 'rgba(113, 128, 150, 1)',
+                        pointBackgroundColor: 'rgba(113, 128, 150, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(113, 128, 150, 1)',
+                        hidden: false
+                    }
+                ]
+            };
+            
+            const chartCtx = document.getElementById('comparisonChart').getContext('2d');
+            const comparisonChart = new Chart(chartCtx, {
+                type: 'radar',
+                data: comparisonData,
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: '#e2e8f0'
+                            },
+                            grid: {
+                                color: '#e2e8f0'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 14
+                                },
+                                color: '#4a5568'
+                            },
+                            ticks: {
+                                backdropColor: '#fdfdfc',
+                                color: '#718096',
+                                stepSize: 1,
+                                display: false
+                            },
+                            min: 0,
+                            max: 5
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.raw;
+                                    const interpretations = ['很差', '差', '一般', '好', '极好'];
+                                    label += interpretations[value-1] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            document.querySelectorAll('.protocol-toggle').forEach(toggle => {
+                toggle.addEventListener('change', (e) => {
+                    const protocolName = e.target.value;
+                    const isVisible = e.target.checked;
+                    const dataset = comparisonChart.data.datasets.find(ds => ds.label === protocolName);
+                    if (dataset) {
+                        dataset.hidden = !isVisible;
+                        comparisonChart.update();
+                    }
+                });
+            });
+
+            const enableTspBtn = document.getElementById('enable-tsp-btn');
+            const tspPlaceholder = document.getElementById('tsp-placeholder');
+
+            enableTspBtn.addEventListener('click', () => {
+                tspPlaceholder.classList.remove('tsp-block-placeholder');
+                tspPlaceholder.classList.add('tsp-block-active', 'diagram-box');
+                tspPlaceholder.innerHTML = `<strong>TSP</strong> (信任跨越层)`;
+                enableTspBtn.textContent = 'TSP 已启用!';
+                enableTspBtn.disabled = true;
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.4
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+---
+import Section from './Section.astro';
+import Card from './Card.astro';
+
+interface Props {
+    title?: string;
+    content?: string;
+}
+
+const {
+    title = "一个新信任经济的开端",
+    content = "TSP不仅仅是一项技术，它是构建一个更安全、更公平、更具弹性的数字世界的基础。"
+} = Astro.props;
+---
+
+<Section 
+    id="conclusion" 
+    theme="gradient"
+    label="结论"
+    title={title}
+>
+    <div class="conclusion-container">
+        <!-- Main Message -->
+        <div class="conclusion-hero">
+            <p class="conclusion-lead">
+                {content}
+            </p>
+            <div class="conclusion-highlights">
+                <div class="highlight-item">
+                    <span class="highlight-icon">🌍</span>
+                    <span class="highlight-text">全球互操作</span>
+                </div>
+                <div class="highlight-item">
+                    <span class="highlight-icon">🔐</span>
+                    <span class="highlight-text">端到端安全</span>
+                </div>
+                <div class="highlight-item">
+                    <span class="highlight-icon">⚡</span>
+                    <span class="highlight-text">即时信任</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Benefits Grid -->
+        <div class="benefits-grid">
+            <Card variant="gradient" className="benefit-card">
+                <div class="benefit-icon">👤</div>
+                <h3 class="benefit-title">用户主权</h3>
+                <p class="benefit-description">
+                    将数据主权和身份控制权完全交还给用户，实现真正的数字自主。
+                </p>
+            </Card>
+            
+            <Card variant="gradient" className="benefit-card">
+                <div class="benefit-icon">🤖</div>
+                <h3 class="benefit-title">AI 就绪</h3>
+                <p class="benefit-description">
+                    为即将到来的自主代理经济提供必要的信任基础设施。
+                </p>
+            </Card>
+            
+            <Card variant="gradient" className="benefit-card">
+                <div class="benefit-icon">🏗️</div>
+                <h3 class="benefit-title">开放标准</h3>
+                <p class="benefit-description">
+                    基于开放标准构建，确保长期的互操作性和创新空间。
+                </p>
+            </Card>
+        </div>
+        
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <Card variant="elevated" className="cta-card">
+                <h3 class="cta-title">加入 TSP 革命</h3>
+                <p class="cta-description">
+                    成为构建去中心化、可信任互联网的一部分。无论您是开发者、研究者还是组织，
+                    TSP 生态系统都欢迎您的参与。
+                </p>
+                <div class="cta-actions">
+                    <a href="#" class="cta-btn cta-btn-primary">
+                        <span class="btn-icon">📚</span>
+                        <span>阅读白皮书</span>
+                        <span class="btn-arrow">→</span>
+                    </a>
+                    <a href="https://github.com/openwallet-foundation-labs/tsp" class="cta-btn cta-btn-secondary" target="_blank" rel="noopener noreferrer">
+                        <span class="btn-icon">💻</span>
+                        <span>GitHub 仓库</span>
+                        <span class="btn-arrow">→</span>
+                    </a>
+                    <a href="#" class="cta-btn cta-btn-secondary">
+                        <span class="btn-icon">🌐</span>
+                        <span>加入社区</span>
+                        <span class="btn-arrow">→</span>
+                    </a>
+                </div>
+                
+                <div class="cta-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">开发者</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">合作组织</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">10+</span>
+                        <span class="stat-label">实施案例</span>
+                    </div>
+                </div>
+            </Card>
+        </div>
+    </div>
+</Section>
+
+<style>
+    .conclusion-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    /* Hero Section */
+    .conclusion-hero {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+    
+    .conclusion-lead {
+        font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+        line-height: 1.8;
+        color: var(--color-text);
+        max-width: 48rem;
+        margin: 0 auto 2.5rem;
+        font-weight: 500;
+    }
+    
+    .conclusion-highlights {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        flex-wrap: wrap;
+    }
+    
+    .highlight-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, rgba(244, 203, 105, 0.1) 0%, rgba(244, 203, 105, 0.05) 100%);
+        border: 2px solid var(--color-primary);
+        border-radius: 2rem;
+        transition: all var(--animation-primary);
+    }
+    
+    .highlight-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(244, 203, 105, 0.2);
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    }
+    
+    .highlight-icon {
+        font-size: 1.5rem;
+    }
+    
+    .highlight-text {
+        font-weight: 600;
+        color: var(--color-dark);
+    }
+    
+    /* Benefits Grid */
+    .benefits-grid {
+        display: grid;
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+    
+    @media (min-width: 768px) {
+        .benefits-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    
+    @media (min-width: 1200px) {
+        .benefits-grid {
+            gap: 3rem;
+        }
+    }
+    
+    .benefit-card {
+        text-align: center;
+        padding: 2.5rem !important;
+    }
+    
+    .benefit-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .benefit-card:nth-child(2) .benefit-icon {
+        animation-delay: 1s;
+    }
+    
+    .benefit-card:nth-child(3) .benefit-icon {
+        animation-delay: 2s;
+    }
+    
+    .benefit-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--color-dark);
+        margin-bottom: 1rem;
+    }
+    
+    .benefit-description {
+        color: var(--color-text);
+        line-height: 1.7;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+        margin-bottom: 4rem;
+    }
+    
+    .cta-card {
+        text-align: center;
+        padding: 4rem !important;
+        background: linear-gradient(135deg, 
+            rgba(244, 203, 105, 0.05) 0%, 
+            rgba(255, 255, 255, 0.98) 50%, 
+            rgba(244, 203, 105, 0.05) 100%) !important;
+    }
+    
+    .cta-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-dark);
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .cta-description {
+        font-size: 1.125rem;
+        color: var(--color-text);
+        line-height: 1.7;
+        max-width: 42rem;
+        margin: 0 auto 2.5rem;
+    }
+    
+    .cta-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+    }
+    
+    .cta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 2rem;
+        border-radius: var(--border-radius-small);
+        font-weight: 600;
+        text-decoration: none;
+        transition: all var(--animation-primary);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-btn-primary {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+        color: var(--color-dark);
+        box-shadow: 0 10px 30px rgba(244, 203, 105, 0.3);
+    }
+    
+    .cta-btn-primary:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 15px 40px rgba(244, 203, 105, 0.4);
+    }
+    
+    .cta-btn-secondary {
+        background: white;
+        color: var(--color-dark);
+        border: 2px solid var(--color-primary);
+    }
+    
+    .cta-btn-secondary:hover {
+        background: linear-gradient(135deg, rgba(244, 203, 105, 0.1) 0%, rgba(244, 203, 105, 0.05) 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-icon {
+        font-size: 1.25rem;
+    }
+    
+    .btn-arrow {
+        transition: transform var(--animation-primary);
+    }
+    
+    .cta-btn:hover .btn-arrow {
+        transform: translateX(5px);
+    }
+    
+    .cta-stats {
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--color-border);
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        display: block;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--color-text);
+        opacity: 0.8;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @media (max-width: 768px) {
+        .conclusion-highlights {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .cta-stats {
+            gap: 2rem;
+        }
+        
+        .cta-card {
+            padding: 2.5rem !important;
+        }
+    }
+</style>

@@ -1,0 +1,609 @@
+---
+import Section from './Section.astro';
+import Card from './Card.astro';
+---
+
+<Section 
+    id="comparison" 
+    theme="gradient"
+    label="范式转移"
+    title="TSP vs. 传统协议"
+    subtitle="与SAML、OAuth和OIDC等中心化协议相比，TSP在信任模型、数据控制和灵活性上实现了根本性的飞跃。"
+>
+    <div class="comparison-container">
+        <div class="comparison-grid">
+            <!-- Chart Card -->
+            <Card variant="elevated" className="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">多维度对比分析</h3>
+                    <p class="chart-description">雷达图展示各协议在关键维度上的表现</p>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: var(--color-primary);"></span>
+                        <span>优秀 (5分)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #10b981;"></span>
+                        <span>良好 (4分)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #3b82f6;"></span>
+                        <span>一般 (3分)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #ef4444;"></span>
+                        <span>较差 (1-2分)</span>
+                    </div>
+                </div>
+            </Card>
+            
+            <!-- Controls Card -->
+            <Card variant="gradient" className="controls-card">
+                <h3 class="controls-title">协议选择器</h3>
+                <p class="controls-description">选择要对比的协议</p>
+                
+                <div class="protocol-toggles">
+                    <label class="toggle-item toggle-tsp">
+                        <input type="checkbox" class="protocol-toggle" value="TSP" checked disabled>
+                        <div class="toggle-card">
+                            <span class="toggle-icon">🔐</span>
+                            <span class="toggle-name">TSP</span>
+                            <span class="toggle-badge">推荐</span>
+                        </div>
+                    </label>
+                    
+                    <label class="toggle-item">
+                        <input type="checkbox" class="protocol-toggle" value="SAML" checked>
+                        <div class="toggle-card">
+                            <span class="toggle-icon">🔑</span>
+                            <span class="toggle-name">SAML 2.0</span>
+                            <span class="toggle-badge">传统</span>
+                        </div>
+                    </label>
+                    
+                    <label class="toggle-item">
+                        <input type="checkbox" class="protocol-toggle" value="OIDC" checked>
+                        <div class="toggle-card">
+                            <span class="toggle-icon">🆔</span>
+                            <span class="toggle-name">OpenID Connect</span>
+                            <span class="toggle-badge">流行</span>
+                        </div>
+                    </label>
+                    
+                    <label class="toggle-item">
+                        <input type="checkbox" class="protocol-toggle" value="OAuth" checked>
+                        <div class="toggle-card">
+                            <span class="toggle-icon">🔒</span>
+                            <span class="toggle-name">OAuth 2.0</span>
+                            <span class="toggle-badge">授权</span>
+                        </div>
+                    </label>
+                </div>
+                
+                <div class="comparison-insights">
+                    <h4 class="insights-title">关键洞察</h4>
+                    <ul class="insights-list">
+                        <li class="insight-item">
+                            <span class="insight-icon">✨</span>
+                            <span>TSP 在所有维度上都达到满分</span>
+                        </li>
+                        <li class="insight-item">
+                            <span class="insight-icon">🎯</span>
+                            <span>完全去中心化的信任模型</span>
+                        </li>
+                        <li class="insight-item">
+                            <span class="insight-icon">🚀</span>
+                            <span>零依赖，最大灵活性</span>
+                        </li>
+                    </ul>
+                </div>
+            </Card>
+        </div>
+        
+        <!-- Feature Comparison Table -->
+        <Card variant="elevated" className="comparison-table-card">
+            <h3 class="table-title">详细功能对比</h3>
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>特性</th>
+                            <th class="protocol-tsp">TSP</th>
+                            <th>SAML 2.0</th>
+                            <th>OIDC</th>
+                            <th>OAuth 2.0</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="feature-name">信任模型</td>
+                            <td class="value-excellent">去中心化</td>
+                            <td class="value-poor">中心化</td>
+                            <td class="value-poor">中心化</td>
+                            <td class="value-poor">中心化</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">数据控制</td>
+                            <td class="value-excellent">用户完全控制</td>
+                            <td class="value-poor">IdP控制</td>
+                            <td class="value-fair">部分控制</td>
+                            <td class="value-fair">部分控制</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">隐私保护</td>
+                            <td class="value-excellent">端到端加密</td>
+                            <td class="value-fair">传输加密</td>
+                            <td class="value-fair">传输加密</td>
+                            <td class="value-fair">传输加密</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">互操作性</td>
+                            <td class="value-excellent">通用协议</td>
+                            <td class="value-poor">XML复杂</td>
+                            <td class="value-good">JSON简单</td>
+                            <td class="value-good">JSON简单</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">扩展性</td>
+                            <td class="value-excellent">无限扩展</td>
+                            <td class="value-poor">受限</td>
+                            <td class="value-fair">中等</td>
+                            <td class="value-fair">中等</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </Card>
+    </div>
+</Section>
+
+<style>
+    .comparison-container {
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+    
+    .comparison-grid {
+        display: grid;
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    @media (min-width: 1200px) {
+        .comparison-grid {
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+    }
+    
+    /* Chart Card */
+    .chart-card {
+        position: relative;
+    }
+    
+    .chart-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .chart-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--color-dark);
+        margin-bottom: 0.5rem;
+    }
+    
+    .chart-description {
+        color: var(--color-text);
+        opacity: 0.8;
+    }
+    
+    .chart-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        height: 400px;
+        margin: 0 auto 2rem;
+        padding: 1rem;
+        background: radial-gradient(circle at center, rgba(244, 203, 105, 0.05) 0%, transparent 70%);
+        border-radius: var(--border-radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #comparisonChart {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    
+    @media (min-width: 1440px) {
+        .chart-wrapper {
+            height: 500px;
+            max-width: 700px;
+        }
+    }
+    
+    .chart-legend {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+    
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--color-text);
+    }
+    
+    .legend-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+    }
+    
+    /* Controls Card */
+    .controls-card {
+        position: sticky;
+        top: calc(var(--nav-bar-height) + 2rem);
+        height: fit-content;
+    }
+    
+    .controls-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--color-dark);
+        margin-bottom: 0.5rem;
+    }
+    
+    .controls-description {
+        color: var(--color-text);
+        opacity: 0.8;
+        margin-bottom: 2rem;
+    }
+    
+    .protocol-toggles {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .toggle-item {
+        position: relative;
+        cursor: pointer;
+    }
+    
+    .toggle-item input {
+        position: absolute;
+        opacity: 0;
+    }
+    
+    .toggle-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: white;
+        border: 2px solid var(--color-border);
+        border-radius: var(--border-radius-small);
+        transition: all var(--animation-primary);
+    }
+    
+    .toggle-item input:checked ~ .toggle-card {
+        background: linear-gradient(135deg, rgba(244, 203, 105, 0.1) 0%, rgba(244, 203, 105, 0.05) 100%);
+        border-color: var(--color-primary);
+        transform: translateX(5px);
+    }
+    
+    .toggle-item:hover .toggle-card {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .toggle-tsp .toggle-card {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+        border-color: var(--color-primary);
+        color: var(--color-dark);
+    }
+    
+    .toggle-icon {
+        font-size: 1.5rem;
+    }
+    
+    .toggle-name {
+        flex: 1;
+        font-weight: 500;
+    }
+    
+    .toggle-badge {
+        padding: 0.25rem 0.75rem;
+        background: rgba(var(--color-dark-rgb), 0.08);
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 1rem;
+        text-transform: uppercase;
+    }
+    
+    .toggle-tsp .toggle-badge {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Insights */
+    .comparison-insights {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.5) 100%);
+        border-radius: var(--border-radius-small);
+    }
+    
+    .insights-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--color-dark);
+        margin-bottom: 1rem;
+    }
+    
+    .insights-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .insight-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 0;
+        color: var(--color-text);
+    }
+    
+    .insight-icon {
+        font-size: 1.25rem;
+    }
+    
+    /* Comparison Table */
+    .comparison-table-card {
+        overflow: hidden;
+    }
+    
+    .table-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--color-dark);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .comparison-table-wrapper {
+        overflow-x: auto;
+    }
+    
+    .comparison-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+        padding: 1rem;
+        text-align: center;
+        border-bottom: 1px solid var(--color-border);
+    }
+    
+    .comparison-table th {
+        background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+        font-weight: 600;
+        color: var(--color-dark);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    .comparison-table th.protocol-tsp {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+        color: var(--color-dark);
+    }
+    
+    .comparison-table tbody tr:hover {
+        background: rgba(244, 203, 105, 0.05);
+    }
+    
+    .feature-name {
+        font-weight: 500;
+        text-align: left;
+        color: var(--color-dark);
+    }
+    
+    .value-excellent {
+        color: #10b981;
+        font-weight: 600;
+        background: rgba(16, 185, 129, 0.1);
+    }
+    
+    .value-good {
+        color: #3b82f6;
+        background: rgba(59, 130, 246, 0.1);
+    }
+    
+    .value-fair {
+        color: #f59e0b;
+        background: rgba(245, 158, 11, 0.1);
+    }
+    
+    .value-poor {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+    }
+    
+    @media (max-width: 1200px) {
+        .controls-card {
+            position: relative;
+            top: 0;
+        }
+        
+        .comparison-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const comparisonData = {
+            labels: ['数据控制', '信任模型', '架构风格', '传输依赖性', '灵活性'],
+            datasets: [
+            {
+                label: 'TSP',
+                data: [5, 5, 5, 5, 5],
+                backgroundColor: 'rgba(244, 203, 105, 0.2)',
+                borderColor: 'rgba(244, 203, 105, 1)',
+                pointBackgroundColor: 'rgba(244, 203, 105, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(244, 203, 105, 1)',
+                borderWidth: 3,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'SAML',
+                data: [1, 2, 2, 2, 2],
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                borderColor: 'rgba(239, 68, 68, 0.8)',
+                pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(239, 68, 68, 1)',
+                borderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                hidden: false
+            },
+            {
+                label: 'OIDC',
+                data: [2, 2, 2, 2, 3],
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: 'rgba(59, 130, 246, 0.8)',
+                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                hidden: false
+            },
+            {
+                label: 'OAuth',
+                data: [2, 2, 2, 2, 2],
+                backgroundColor: 'rgba(156, 163, 175, 0.1)',
+                borderColor: 'rgba(156, 163, 175, 0.8)',
+                pointBackgroundColor: 'rgba(156, 163, 175, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(156, 163, 175, 1)',
+                borderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                hidden: false
+            }
+        ]
+    };
+    
+    const chartCtx = document.getElementById('comparisonChart')?.getContext('2d');
+    if (chartCtx) {
+        const comparisonChart = new Chart(chartCtx, {
+            type: 'radar',
+            data: comparisonData,
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.08)'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 14,
+                                weight: '500'
+                            },
+                            color: 'rgba(0, 0, 0, 0.7)'
+                        },
+                        ticks: {
+                            backdropColor: 'transparent',
+                            color: 'rgba(0, 0, 0, 0.5)',
+                            stepSize: 1,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        min: 0,
+                        max: 5
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: '500'
+                            },
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#1f2937',
+                        bodyColor: '#4b5563',
+                        borderColor: '#e5e7eb',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                const value = context.raw;
+                                const interpretations = ['很差', '差', '一般', '好', '极好'];
+                                label += interpretations[value-1] || '';
+                                return label;
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                }
+            }
+        });
+
+        // Protocol toggles
+        document.querySelectorAll('.protocol-toggle').forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                const protocolName = e.target.value;
+                const isVisible = e.target.checked;
+                const dataset = comparisonChart.data.datasets.find(ds => ds.label === protocolName);
+                if (dataset) {
+                    dataset.hidden = !isVisible;
+                    comparisonChart.update();
+                }
+            });
+        });
+    }
+    });
+</script>

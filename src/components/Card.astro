@@ -1,0 +1,115 @@
+---
+interface Props {
+    variant?: 'default' | 'bordered' | 'elevated' | 'gradient';
+    hover?: boolean;
+    className?: string;
+    padding?: 'none' | 'small' | 'medium' | 'large';
+}
+
+const { 
+    variant = 'default',
+    hover = true,
+    className = '',
+    padding = 'medium'
+} = Astro.props;
+
+const paddingClasses = {
+    none: '',
+    small: 'card-padding-small',
+    medium: 'card-padding-medium',
+    large: 'card-padding-large'
+};
+---
+
+<div class={`card card-${variant} ${hover ? 'card-hover' : ''} ${paddingClasses[padding]} ${className}`}>
+    <slot />
+</div>
+
+<style>
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        transition: all var(--animation-primary);
+        position: relative;
+    }
+    
+    .card-padding-small {
+        padding: 1.5rem;
+    }
+    
+    .card-padding-medium {
+        padding: 2.5rem;
+    }
+    
+    .card-padding-large {
+        padding: 3.5rem;
+    }
+    
+    .card-default {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        border: 1px solid var(--color-border);
+    }
+    
+    .card-bordered {
+        border: 2px solid var(--color-primary);
+        box-shadow: 0 4px 20px rgba(244, 203, 105, 0.1);
+    }
+    
+    .card-elevated {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        border: 1px solid transparent;
+    }
+    
+    .card-gradient {
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.95) 0%, 
+            rgba(254, 249, 240, 0.95) 100%);
+        box-shadow: 0 10px 30px rgba(244, 203, 105, 0.15);
+        border: 1px solid rgba(244, 203, 105, 0.2);
+    }
+    
+    .card-hover:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card-bordered.card-hover:hover {
+        border-color: var(--color-primary-hover);
+        box-shadow: 0 20px 60px rgba(244, 203, 105, 0.25);
+    }
+    
+    .card-gradient.card-hover:hover {
+        box-shadow: 0 20px 50px rgba(244, 203, 105, 0.3);
+    }
+    
+    /* Add glow effect on hover */
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, var(--color-primary), transparent);
+        opacity: 0;
+        transition: opacity var(--animation-primary);
+        pointer-events: none;
+        z-index: -1;
+        filter: blur(40px);
+    }
+    
+    .card:hover::before {
+        opacity: 0.1;
+    }
+    
+    @media (min-width: 1440px) {
+        .card-padding-medium {
+            padding: 3rem;
+        }
+        
+        .card-padding-large {
+            padding: 4rem;
+        }
+    }
+</style>

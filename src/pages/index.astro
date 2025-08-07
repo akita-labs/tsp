@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import IntroSection from '../components/IntroSection.astro';
+import ProblemSection from '../components/ProblemSection.astro';
+import ArchitectureSection from '../components/ArchitectureSection.astro';
+import EcosystemSection from '../components/EcosystemSection.astro';
+import ComparisonSection from '../components/ComparisonSection.astro';
+import FutureSection from '../components/FutureSection.astro';
+import ConclusionSection from '../components/ConclusionSection.astro';
+---
+
+<Layout title="交互式报告：信任跨越协议 (TSP)">
+    <Header />
+    <main>
+        <IntroSection />
+        <ProblemSection />
+        <ArchitectureSection />
+        <EcosystemSection />
+        <ComparisonSection />
+        <FutureSection />
+        <ConclusionSection />
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.4
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</Layout>
